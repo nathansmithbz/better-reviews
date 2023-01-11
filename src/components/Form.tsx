@@ -3,25 +3,33 @@ import {
   createStyles,
   makeStyles,
   Typography,
-  Paper,
+  //Paper,
   Button,
+  Snackbar,
 } from "@material-ui/core";
-import Grid from "@mui/material/Grid";
+import { Grid, Paper } from "@mui/material";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import CustomRatingField from "./CustomRatingField";
+import CustomSliderField from "./CustomSliderField";
+import {generateTable} from "./generateTable"
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const useStyles = makeStyles(() =>
   createStyles({
     form: {
       display: "flex",
       flexDirection: "column",
+      textAlign: 'center',
     },
     container: {
       backgroundColor: "#ffffff",
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%,-50%)",
       padding: 30,
       textAlign: "center",
     },
@@ -29,83 +37,14 @@ const useStyles = makeStyles(() =>
       margin: "0px 0 20px 0",
     },
     button: {
-      margin: "20px 0",
+        margin: "20px auto",
+        maxWidth: "15rem",
     },
+    paper: {
+        padding:'2rem',
+    }
   })
 );
-
-const generateTable = (
-  ratingStory: number | null,
-  ratingGameplay: number | null,
-  ratingGraphics: number | null,
-  ratingSound: number | null,
-  ratingReplay: number | null,
-  ratingDifficulty: number | null,
-  ratingBugs: number | null,
-  ratingRequirements: number | null
-) => {
-  return `
-    [hr][/hr]
-    [table]
-    [tr]
-    [th]Category[/th]
-    [th]Score[/th]
-    [/tr]
-    [tr]
-    [td]Story[/td]
-    [td]${drawStars(ratingStory)}[/td]
-    [/tr]
-    [tr]
-    [td]Gameplay[/td]
-    [td]${drawStars(ratingGameplay)}[/td]
-    [/tr]
-    [tr]
-    [td]Graphics[/td]
-    [td]${drawStars(ratingGraphics)}[/td]
-    [/tr]
-    [tr]
-    [td]Sound Design[/td]
-    [td]${drawStars(ratingSound)}[/td]
-    [/tr]
-    [tr]
-    [td]Replay Value[/td]
-    [td]${drawStars(ratingReplay)}[/td]
-    [/tr]
-    [tr]
-    [td]Replay Value[/td]
-    [td]${drawStars(ratingDifficulty)}[/td]
-    [/tr]
-    [tr]
-    [td]Replay Value[/td]
-    [td]${drawStars(ratingBugs)}[/td]
-    [/tr]
-    [tr]
-    [td]Replay Value[/td]
-    [td]${drawStars(ratingRequirements)}[/td]
-    [/tr]
-    [tr]
-    [td]Game Length[/td]
-    [td]██░░░░░░░░ 
-    [i] ∞ infinite [/i]
-    Very short
-    [/td]
-    [/tr]
-    
-    [/table]
-    
-    [hr][/hr]
-    `;
-};
-
-const drawStars = (stars: number | null) => {
-   let starString = '';
-    if (stars != null) {
-        starString += '★'.repeat(stars) + '☆'.repeat(5 - stars);
-    } else {
-        starString = '☆'.repeat(5);
-    }
-    return starString;
-};
 
 const Form = () => {
   const classes = useStyles();
@@ -118,6 +57,7 @@ const Form = () => {
     if ("clipboard" in navigator) {
       navigator.clipboard.writeText(
         generateTable(
+            ratingOverall,
           ratingStory,
           ratingGameplay,
           ratingGraphics,
@@ -125,13 +65,16 @@ const Form = () => {
           ratingReplay,
           ratingDifficulty,
           ratingBugs,
-          ratingRequirements
+          ratingRequirements,
+          ratingLength
         )
       );
+      setOpen(true);
     } else {
       document.execCommand("copy", true, "hi");
     }
   };
+  const [ratingOverall, setratingOverall] = useState<number | null>(1);
   const [ratingStory, setRatingStory] = useState<number | null>(1);
   const [ratingGameplay, setRatingGameplay] = useState<number | null>(1);
   const [ratingGraphics, setRatingGraphics] = useState<number | null>(1);
@@ -143,15 +86,24 @@ const Form = () => {
     1
   );
 
+  const [open, setOpen] = useState(false);
+
   const [ratingLength, setRatingLength] = useState<number | number[]>(50);
 
   return (
-    <Paper className={classes.container}>
+    <Paper className={classes.paper}>
       <Typography variant={"h4"} className={classes.title}>
-        Form
+        Better Steam Reviews
       </Typography>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
-        <Grid container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid container rowSpacing={5} justifyContent="center" columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid item xs={12}>
+            <CustomRatingField
+              value={ratingOverall}
+              setValue={setratingOverall}
+              name={"Overall Rating"}
+            ></CustomRatingField>
+          </Grid>
           <Grid item xs={6}>
             <CustomRatingField
               value={ratingStory}
@@ -208,14 +160,31 @@ const Form = () => {
               name={"PC Requirements"}
             ></CustomRatingField>
           </Grid>
+          <Grid item xs={12} sm={6} >
+            <CustomSliderField
+              value={ratingLength}
+              setValue={setRatingLength}
+              name={"Game Length"}
+            ></CustomSliderField>
+          </Grid>
         </Grid>
         <Button
           type={"submit"}
           variant={"contained"}
           className={classes.button}
         >
-          Submit
+          Copy to clipboard
         </Button>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+        >
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Coppied to cliboard!
+          </Alert>
+        </Snackbar>
       </form>
     </Paper>
   );

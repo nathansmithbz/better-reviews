@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Typography, Rating } from "@mui/material/";
+import { Typography, Rating, Card, CardContent } from "@mui/material/";
 import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
@@ -10,6 +10,8 @@ interface IProps {
 
 export default function CustomRatingField(IProps: IProps) {
     return (
+        <Card>
+        <CardContent>
         <div>
             <Typography component="legend">{IProps.name}</Typography>
             <Rating
@@ -21,6 +23,8 @@ export default function CustomRatingField(IProps: IProps) {
                 }
             />
         </div>
+      </CardContent>
+      </Card>
 
     )
 }
