@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/better-reviews/static/css/main.23884299.css",
+    "main.js": "/better-reviews/static/js/main.5b00c2ff.js",
+    "static/js/787.61882708.chunk.js": "/better-reviews/static/js/787.61882708.chunk.js",
+    "index.html": "/better-reviews/index.html",
+    "main.23884299.css.map": "/better-reviews/static/css/main.23884299.css.map",
+    "main.5b00c2ff.js.map": "/better-reviews/static/js/main.5b00c2ff.js.map",
+    "787.61882708.chunk.js.map": "/better-reviews/static/js/787.61882708.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.23884299.css",
+    "static/js/main.5b00c2ff.js"
+  ]
+}
