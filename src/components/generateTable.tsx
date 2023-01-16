@@ -8,7 +8,8 @@ export const generateTable = (
     ratingDifficulty: number | null,
     ratingBugs: number | null,
     ratingRequirements: number | null,
-    ratingLength: number | number[]
+    ratingLength: number | number[],
+    emojiChecked: boolean   
   ) => {
     return `
       [hr][/hr]
@@ -18,50 +19,50 @@ export const generateTable = (
       [th]Score[/th]
       [/tr]
       [tr]
-      [td]🏆 Overall Rating[/td]
+      [td]${(emojiChecked) ? "🏆" : ""} Overall Rating[/td]
       [td]${drawStars(ratingOverall)}[/td]
       [/tr]
       [tr]
-      [td]📖 Story[/td]
+      [td]${(emojiChecked) ? "📖" : ""} Story[/td]
       [td]${drawStars(ratingStory)}[/td]
       [/tr]
       [tr]
-      [td]🎮 Gameplay[/td]
+      [td]${(emojiChecked) ? "🎮" : ""} Gameplay[/td]
       [td]${drawStars(ratingGameplay)}[/td]
       [/tr]
       [tr]
-      [td]🎨 Graphics[/td]
+      [td]${(emojiChecked) ? "🎨" : ""} Graphics[/td]
       [td]${drawStars(ratingGraphics)}[/td]
       [/tr]
       [tr]
-      [td]🎵 Sound Design[/td]
+      [td]${(emojiChecked) ? "🎵" : ""} Sound Design[/td]
       [td]${drawStars(ratingSound)}[/td]
       [/tr]
       [tr]
-      [td]↩️ Replay Value[/td]
+      [td]${(emojiChecked) ? "↩" : ""} Replay Value[/td]
       [td]${drawStars(ratingReplay)}[/td]
       [/tr]
       [tr]
-      [td]😧 Difficulty[/td]
+      [td]${(emojiChecked) ? "😧" : ""} Difficulty[/td]
       [td]${drawStars(ratingDifficulty)}[/td]
       [/tr]
       [tr]
-      [td]🐛 Bug free?[/td]
+      [td]${(emojiChecked) ? "🐛" : ""} Bug free?[/td]
       [td]${drawStars(ratingBugs)}[/td]
       [/tr]
       [tr]
-      [td]🖥️ PC Requirements[/td]
+      [td]${(emojiChecked) ? "🖥️" : ""} PC Requirements[/td]
       [td]${drawStars(ratingRequirements)}[/td]
       [/tr]
       [tr]
-      [td]📈 Game Length[/td]
+      [td]${(emojiChecked) ? "📈" : ""} Game Length[/td]
       [td]${drawProgress(ratingLength)}
       [/td]
       [/tr]
       [/table]
 
         Create your own review table right here: https://bettergamereviews.com/ 
-        🎮 Happy gaming! 🎮
+        ${(emojiChecked) ? "🎮" : ""} Happy gaming! ${(emojiChecked) ? "🎮" : ""} 
 
       [hr][/hr]
       `;

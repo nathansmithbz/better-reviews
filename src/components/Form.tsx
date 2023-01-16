@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/core";
 import {
-  createStyles,
-  makeStyles,
+  Avatar,
+  Grid,
+  Paper,
   Typography,
-  //Paper,
   Button,
   Snackbar,
-} from "@material-ui/core";
-import { Grid, Paper } from "@mui/material";
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import CustomRatingField from "./CustomRatingField";
 import CustomSliderField from "./CustomSliderField";
-import {generateTable} from "./generateTable"
+import Header from "./Header";
+import { generateTable } from "./generateTable";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -21,43 +24,17 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    form: {
-      display: "flex",
-      flexDirection: "column",
-      textAlign: 'center',
-    },
-    container: {
-      backgroundColor: "#ffffff",
-      padding: 30,
-      textAlign: "center",
-    },
-    title: {
-      margin: "0px 0 20px 0",
-    },
-    button: {
-        margin: "20px auto",
-        maxWidth: "15rem",
-    },
-    paper: {
-        padding:'2rem',
-    }
-  })
-);
-
 const Form = () => {
-  const classes = useStyles();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmojiChecked(event.target.checked);
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(ratingStory);
     if ("clipboard" in navigator) {
       navigator.clipboard.writeText(
         generateTable(
-            ratingOverall,
+          ratingOverall,
           ratingStory,
           ratingGameplay,
           ratingGraphics,
@@ -66,12 +43,11 @@ const Form = () => {
           ratingDifficulty,
           ratingBugs,
           ratingRequirements,
-          ratingLength
+          ratingLength,
+          emojiChecked
         )
       );
-      setOpen(true);
-    } else {
-      document.execCommand("copy", true, "hi");
+      setSuccessBarOpen(true);
     }
   };
   const [ratingOverall, setratingOverall] = useState<number | null>(1);
@@ -85,108 +61,118 @@ const Form = () => {
   const [ratingRequirements, setRatingRequirements] = useState<number | null>(
     1
   );
+  const [emojiChecked, setEmojiChecked] = React.useState(false);
 
-  const [open, setOpen] = useState(false);
+  const [successBarOpen, setSuccessBarOpen] = useState(false);
 
   const [ratingLength, setRatingLength] = useState<number | number[]>(50);
 
   return (
-    <Paper className={classes.paper}>
-      <Typography variant={"h4"} className={classes.title}>
-        Better Steam Reviews
-      </Typography>
-      <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
-        <Grid container rowSpacing={5} justifyContent="center" columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={12}>
-            <CustomRatingField
-              value={ratingOverall}
-              setValue={setratingOverall}
-              name={"Overall Rating"}
-            ></CustomRatingField>
+      <Grid container direction="column">
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <Grid item container spacing={2}>
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingOverall}
+                setValue={setratingOverall}
+                name={"Overall Rating"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingStory}
+                setValue={setRatingStory}
+                name={"Story"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingGameplay}
+                setValue={setRatingGameplay}
+                name={"Gameplay"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingGraphics}
+                setValue={setRatingGraphics}
+                name={"Graphics"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingSound}
+                setValue={setRatingSound}
+                name={"Sound Design"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingReplay}
+                setValue={setRatingReplay}
+                name={"Replay Value"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingDifficulty}
+                setValue={setRatingDifficulty}
+                name={"Difficulty"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingBugs}
+                setValue={setRatingBugs}
+                name={"Bug free?"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={0} sm={2} />
+            <Grid item xs={12} sm={4}>
+              <CustomRatingField
+                value={ratingRequirements}
+                setValue={setRatingRequirements}
+                name={"PC Requirements"}
+              ></CustomRatingField>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <CustomSliderField
+                value={ratingLength}
+                setValue={setRatingLength}
+                name={"Game Length"}
+              ></CustomSliderField>
+              <Grid item xs={0} sm={2} />
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingStory}
-              setValue={setRatingStory}
-              name={"Story"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingGameplay}
-              setValue={setRatingGameplay}
-              name={"Gameplay"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingGraphics}
-              setValue={setRatingGraphics}
-              name={"Graphics"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingSound}
-              setValue={setRatingSound}
-              name={"Sound Design"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingReplay}
-              setValue={setRatingReplay}
-              name={"Replay Value"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingDifficulty}
-              setValue={setRatingDifficulty}
-              name={"Difficulty"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingBugs}
-              setValue={setRatingBugs}
-              name={"Bug free?"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomRatingField
-              value={ratingRequirements}
-              setValue={setRatingRequirements}
-              name={"PC Requirements"}
-            ></CustomRatingField>
-          </Grid>
-          <Grid item xs={12} sm={6} >
-            <CustomSliderField
-              value={ratingLength}
-              setValue={setRatingLength}
-              name={"Game Length"}
-            ></CustomSliderField>
-          </Grid>
-        </Grid>
-        <Button
-          type={"submit"}
-          variant={"contained"}
-          className={classes.button}
-        >
-          Copy to clipboard
-        </Button>
-        <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          open={open}
-          autoHideDuration={3000}
-          onClose={() => setOpen(false)}
-        >
-          <Alert severity="success" sx={{ width: "100%" }}>
-            Coppied to cliboard!
-          </Alert>
-        </Snackbar>
-      </form>
-    </Paper>
+          <FormControlLabel
+            control={
+              <Checkbox checked={emojiChecked} onChange={handleChange} />
+            }
+            label="Add Emojis"
+          />
+          <Button type={"submit"} variant={"contained"}>
+            Copy to clipboard
+          </Button>
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            open={successBarOpen}
+            autoHideDuration={3000}
+            onClose={() => setSuccessBarOpen(false)}
+          >
+            <Alert severity="success" sx={{ width: "100%" }}>
+              Coppied to cliboard!
+            </Alert>
+          </Snackbar>
+        </form>
+      </Grid>
   );
 };
 
