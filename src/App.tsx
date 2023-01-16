@@ -9,7 +9,10 @@ import { Paper } from "@mui/material";
 function App() {
   return (
     <div className="App">
-      <Paper>
+      <Paper  style={{
+    paddingBottom: 20,
+    border: "1px solid black"
+  }}>
       <Header/>
         <Form />
         {/* <Footer /> */}

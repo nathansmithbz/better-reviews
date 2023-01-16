@@ -12,7 +12,6 @@ export const generateTable = (
     emojiChecked: boolean   
   ) => {
     return `
-      [hr][/hr]
       [table]
       [tr]
       [th]Category[/th]
