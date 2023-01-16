@@ -1,11 +1,19 @@
+import "./App.css";
+import Form from "./components/Form";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import { Paper } from "@mui/material";
 
-import './App.css';
-import Form from "./components/Form"
+
 
 function App() {
   return (
     <div className="App">
-       <div><Form/></div>
+      <Paper>
+      <Header/>
+        <Form />
+        {/* <Footer /> */}
+      </Paper>
     </div>
   );
 }
